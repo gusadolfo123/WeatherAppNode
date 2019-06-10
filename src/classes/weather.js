@@ -1,21 +1,22 @@
 const axios = require('axios');
 
 const instance = axios.create({
-    baseURL: 'https://devru-latitude-longitude-find-v1.p.rapidapi.com/latlon.php',
-    headers: {
-        'X-RapidAPI-Key': '6ffb0c4f3amsh2a791a0048e0239p1b9009jsnb1317dce413e'
-    }
+	baseURL: 'https://openweathermap.org/data/2.5/weather',
 });
 
 class Weather {
-    constructor(direction) {
-        this.direction = direction;
-    }
-    async getWeather() {
-        const response = await instance.get(`?location=${this.direction}`)
-        return response.data.Results[0];
-    }
+	constructor() {}
+	async getWeather({ lat, lon }) {
+		try {
+			const result = await instance.get(`https://openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=b6907d289e10d714a6e88b30761fae22`);
+			if (result === undefined) {
+				throw new Error(`No hay resultados API getWeather`);
+			}
+			return result.data.weather[0];
+		} catch (error) {
+			throw new Error(`No hay resultados API getWeather`);
+		}
+	}
 }
-module.exports = {
-    Weather
-}
+
+module.exports = { Weather };
